@@ -25,16 +25,13 @@
   <!-- Links -->
   <ul class="navbar-nav">
     <li class="nav-item">
-      <a class="nav-link" href="klanten/loginCustomer.php">Inloggen klanten</a>
+      <a class="nav-link" href="reserveren.php">Reserveer hier!</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" href="medewerkers/loginEmployee.php">Inloggen medewerkers</a>
+      <a class="nav-link" href="medewerkers/loginMedewerkers.php">Inloggen medewerkers</a>
     </li>
     <li class="nav-item">
       <a class="nav-link" href="contact.php">Contactpagina</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="register.php">Registreren</a>
     </li>
   </ul>
 </nav>

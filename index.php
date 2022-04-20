@@ -25,7 +25,7 @@
   <!-- Links -->
   <ul class="navbar-nav">
     <li class="nav-item">
-      <a class="nav-link" href="create.php">Reserveer hier!</a>
+      <a class="nav-link" href="reserveren.php">Reserveer hier!</a>
     </li>
     <li class="nav-item">
       <a class="nav-link" href="medewerkers/loginMedewerkers.php">Inloggen medewerkers</a>
@@ -43,6 +43,7 @@
   <div class="body">
     <h2>Hotel ter Duin</h2>
     <h4>Welkom op de website van Hotel ter Duin!</h4>
+    <h4>Reserveer uw kamer nu!</h4>
   </div>
 
 </body>

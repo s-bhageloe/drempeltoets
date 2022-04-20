@@ -15,7 +15,7 @@ if(isset($_POST['submit'])){
     }
 
     if(!$error){
-        $obj = new DB('localhost', 'root', '', 'hotel', 'utf8mb4');
+        $obj = new DB('localhost', 'root', '', 'hotel_ter_duin', 'utf8mb4');
         $obj->loginMedewerker($_POST['gebruikersnaam'], $_POST['wachtwoord']);
         
     }else{
@@ -38,6 +38,29 @@ if(isset($_POST['submit'])){
     <title>Inloggen</title>
 </head>
 <body>
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+  <!-- Brand/logo -->
+  <a class="navbar-brand" href="../index.php">
+    <img src="hotel.jpg" alt="logo" style="width:40px;">
+  </a>
+  
+  <!-- Links -->
+  <ul class="navbar-nav">
+    <li class="nav-item">
+      <a class="nav-link" href="../reserveren.php">Reserveer hier!</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="loginMedewerkers.php">Inloggen medewerkers</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="../contact.php">Contactpagina</a>
+    </li>
+  </ul>
+</nav>
+
+  <div id="horizontal">
+    <div class="bar">
+  </div>
 	<div class="box">
 		<h2>Inloggen</h2>
 		<div class="box-content">

@@ -2,15 +2,17 @@
 include_once 'database.php';
 
 // Connection made
-$db = new DB('localhost', 'root', '', 'hotel', 'utf8mb4'); //hier zet je de waardes($..) constructor
+$db = new DB('localhost', 'root', '', 'hotel_ter_duin', 'utf8mb4'); //hier zet je de waardes($..) constructor
 
 if(isset($_POST["submit"])){
+    print_r($_POST);
     //fieldnames - input fields
-    $fieldnames = ['reservering'];
+    $fieldnames = ['naam', 'adres', 'plaats', 'postcode', 'telefoonnummer', 'kamertype'];
 
     //Var boolean
     $err = false;
 
+    
     //Looping
     foreach ($fieldnames as $fieldname) {
         //if fieldname is empty -> $err = true
@@ -20,31 +22,28 @@ if(isset($_POST["submit"])){
     }
 
 
+
     if ($err) {
         echo "All fields are required!";
     } else {
-        $name = $_POST['reservering'];
         
-        $db->createReservering($beginDatum, $eindDatum);
+        $db->createKlant($_POST['naam'], $_POST['adres'], $_POST['plaats'], $_POST['postcode'], $_POST['telefoonnummer'], $_POST['kamertype']);
     }
 }
 
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
-<html>
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
   <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.slim.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
+    <title>Reserveren</title>
 </head>
-<body
 <body>
 <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
   <!-- Brand/logo -->
@@ -69,19 +68,14 @@ if(isset($_POST["submit"])){
   <div id="horizontal">
     <div class="bar">
   </div>
-
-
-          <form class="formRes" method="post" action="reservering.php">
+<form class="formRes" method="post" action="reserveren.php">
            <br> <div>
-                <input type="text" name="username" placeholder="Naam" required/>
+                <input type="text" name="naam" placeholder="Naam" required/>
                 <input type="text" name="adres" placeholder="Adres" required/> <br>
             </div>  <br>
-            <div> 
-                <input type="date" name="date" placeholder="Begin datum" required/>
-                <input type="date" name="duur" placeholder="Eind datum" required/> <br>
-            </div> <br>
+                    <!-- dropdown met kamers die naar database gestuurd worden -->
             <div>
-                <select id="keuze_verblijf" name="keuze_verblijf" required>
+                <select id="plaats" name="plaats" required> 
                   <option value="">Plaats</option>
                   <option value="Amsterdam">Amsterdam</option>
                   <option value="Rotterdam">Rotterdam</option>
@@ -94,15 +88,20 @@ if(isset($_POST["submit"])){
                   <option value="Bergen">Bergen</option>
                   <option value="Hoofddorp">Hoofddorp</option>
                 </select>
+            </div> <br>
+            <div>
+            <select id="kamertype" name="kamertype" required> 
+                  <option value="">Kamertype</option>
+                  <option value="Gezin">Suite</option>
+                  <option value="Twee persoons">Twee persoonskamer</option>
+                  <option value="Een persoons">Een persoonskamer</option>
+                </select>
+            </div>
                 <input type="text" name="postcode" placeholder="Postcode" required/>
               </div> <br>
-              <input type="number" name="phonenumber" placeholder="Telefoonnummer" required/>
+              <input type="number" name="telefoonnummer" placeholder="Telefoonnummer" required/>
               </div> <br>
                 <button type="submit" name="submit" class="btn btn-primary">Reserveer</button><br> <br> <br>
         </form>
-
-
-
-
 </body>
 </html>

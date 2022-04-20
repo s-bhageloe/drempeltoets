@@ -36,7 +36,11 @@ class DB{
      */
     public function showReservering(){
         try {
-            $query = "SELECT * FROM klant;";
+            $query = "SELECT reservering_klant.reserveringklantid, naam, adres, kamernummer, plaats, postcode, telefoonnummer, beginDatum, eindDatum, kamertype FROM reservering_klant
+                    INNER JOIN klantgegevens
+                        ON reservering_klant.klantgegevensid = klantgegevens.klantgegevensid
+                    INNER JOIN kamer
+                        ON reservering_klant.kamerid = kamer.kamerid";
             
             $prep = $this->pdo->prepare($query);
 
@@ -49,7 +53,6 @@ class DB{
             throw $th;
         }
     }
-
 
     public function loginMedewerker($gebruikersnaam, $wachtwoord){
         $sql="SELECT * FROM medewerker WHERE gebruikersnaam = :gebruikersnaam";
@@ -80,15 +83,15 @@ class DB{
 
     }
 
-    public function deleteReservering($klantnummer){
+    public function deleteReservering($reserveringklantid){
         try {
             $query = $this->pdo->prepare(
-                "DELETE FROM klant
-                 WHERE klantnummer = :klantnummer;"
+                "DELETE FROM reservering_klant
+                 WHERE reserveringklantid = :reserveringklantid;"
             );
 
             $query->execute([
-                'klantnummer' => $klantnummer
+                'reserveringklantid' => $reserveringklantid
             ]);
 
             header("Location: reserverings_overzicht.php");
@@ -97,14 +100,18 @@ class DB{
         }
     }
 
-    public function selectSpecificKlant($klantnummer){
+    public function selectSpecificKlant($reserveringklantid){
         try {
-            $query = "SELECT * FROM klant WHERE klantnummer = :klantnummer;";
+            $query = "SELECT reservering_klant.reserveringklantid, naam, adres, kamernummer, plaats, postcode, telefoonnummer, beginDatum, eindDatum, kamertype FROM reservering_klant
+            INNER JOIN klantgegevens
+                ON reservering_klant.klantgegevensid = klantgegevens.klantgegevensid
+            INNER JOIN kamer
+                ON reservering_klant.kamerid = kamer.kamerid WHERE reserveringklantid = :reserveringklantid;";
 
             $prep = $this->pdo->prepare($query);
 
             $prep->execute([
-                'klantnummer' => $klantnummer
+                'reserveringklantid' => $reserveringklantid
             ]);
 
             $row = $prep->fetch(PDO::FETCH_ASSOC);
@@ -115,21 +122,37 @@ class DB{
         }
     }
 
-    public function updateKlant($klantnummer, $naam, $adres, $plaats, $postcode, $telefoonnummer, $begin_datum, $eind_datum){
+    public function updateKlant($reserveringklantid, $naam, $adres, $plaats, $postcode, $telefoonnummer, $beginDatum, $eindDatum, $kamertype){
         try {
-            $query = "UPDATE klant SET naam = :naam, adres = :adres, plaats = :plaats, postcode = :postcode, telefoonnummer = :telefoonnummer, begin_datum = :begin_datum, eind_datum = :eind_datum WHERE klantnummer = :klantnummer;";
+            $query = 
+            "UPDATE reservering_klant
+            INNER JOIN klantgegevens 
+                ON reservering_klant.klantgegevensid = klantgegevens.klantgegevensid
+            INNER JOIN kamer
+                ON reservering_klant.kamerid = kamer.kamerid 
+            SET 
+              klantgegevens.naam = :naam,
+              klantgegevens.adres = :adres,
+              klantgegevens.plaats = :plaats,
+              klantgegevens.postcode = :postcode,
+              klantgegevens.telefoonnummer = :telefoonnummer,
+              reservering_klant.beginDatum = :beginDatum,
+              reservering_klant.eindDatum = :eindDatum,
+              klantgegevens.kamertype = :kamertype
+            WHERE reservering_klant.reserveringklantid = :reserveringklantid";
 
             $prep = $this->pdo->prepare($query);
-
+print_r($query);
             $prep->execute([
-                'klantnummer' => $klantnummer,
                 'naam' => $naam,
                 'adres' => $adres,
                 'plaats' => $plaats,
                 'postcode' => $postcode,
                 'telefoonnummer' => $telefoonnummer,
-                'begin_datum' => $begin_datum,
-                'eind_datum' => $eind_datum
+                'beginDatum' => $beginDatum,
+                'eindDatum' => $eindDatum,
+                'kamertype' => $kamertype,
+                'reserveringklantid' => $reserveringklantid
             ]);
 
             header('Location: reserverings_overzicht.php');
@@ -140,9 +163,10 @@ class DB{
         }
     }
     
-    public function createKlant($klantnummer, $naam, $adres, $plaats, $postcode, $telefoonnummer, $begin_datum, $eind_datum){
+    public function createKlant($naam, $adres, $plaats, $postcode, $telefoonnummer, $kamertype){
         try {
-            $query = "INSERT INTO klant(naam, adres, plaats, postcode, telefoonnummer, begin_datum, eind_datum) VALUES (:naam, :adres, :plaats, :postcode, :telefoonnummer, :begin_datum, :eind_datum WHERE klantnummer = :klantnummer;)";
+            $query = "INSERT INTO klantgegevens(naam, adres, plaats, postcode, telefoonnummer, kamertype) 
+            VALUES (:naam, :adres, :plaats, :postcode, :telefoonnummer, :kamertype)";
 
             $prep = $this->pdo->prepare($query);
 
@@ -152,11 +176,10 @@ class DB{
                 'plaats' => $plaats,
                 'postcode' => $postcode,
                 'telefoonnummer' => $telefoonnummer,
-                'begin_datum' => $begin_datum,
-                'eind_datum' => $eind_datum
+                'kamertype' => $kamertype
             ]);
 
-            header('Location: index.php');
+            //header('Location: reserveren.php');
 
             exit;
         } catch (\Throwable $th) {

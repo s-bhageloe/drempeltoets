@@ -17,7 +17,7 @@ if(!isset($_SESSION['gebruikersnaam'])) {
 print_r($_SESSION['gebruikersnaam']);
 // else{
 // Connection made
-$db = new DB('localhost', 'root', '', 'hotel', 'utf8mb4'); //hier zet je de waardes($..) constructor
+$db = new DB('localhost', 'root', '', 'hotel_ter_duin', 'utf8mb4'); //hier zet je de waardes($..) constructor
 
 $reservering = $db->showReservering();
 
@@ -46,6 +46,7 @@ $reservering = $db->showReservering();
     <!-- JQuery Datatables Plugin  -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.6.4/css/buttons.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.2.2/css/buttons.dataTables.min.css">
 </head>
 <body>
     <main>
@@ -62,7 +63,9 @@ $reservering = $db->showReservering();
                     <th scope="col">Telefoonnummer</th>
                     <th scope="col">Begin Datum</th>
                     <th scope="col">Eind Datum</th>
-
+                    <th scope="col">Kamertype</th>
+                    <th></th>
+                    <th></th>
 
                 </tr>
             </thead>
@@ -70,19 +73,20 @@ $reservering = $db->showReservering();
                 <!-- users are rows and user is a single row  -->
                 <?php foreach ($reservering as $reserveer): ?>
                     <tr>
-                        <td><?php echo $reserveer["klantnummer"]; ?></td>
+                        <td><?php echo $reserveer["reserveringklantid"]; ?></td>
                         <td><?php echo $reserveer["naam"];?></td>
                         <td><?php echo $reserveer["adres"];?></td>
                         <td><?php echo $reserveer["plaats"];?></td>
                         <td><?php echo $reserveer["postcode"];?></td>
                         <td><?php echo $reserveer["telefoonnummer"];?></td>
-                        <td><?php echo $reserveer["begin_datum"];?></td>
-                        <td><?php echo $reserveer["eind_datum"];?></td>
+                        <td><?php echo $reserveer["beginDatum"];?></td>
+                        <td><?php echo $reserveer["eindDatum"];?></td>
+                        <td><?php echo $reserveer["kamertype"];?></td>
                         <td class="noExl">
-                            <a class="btn btn-primary mr-2 btn-sm" href="edit.php?klantnummer=<?php echo $reserveer["klantnummer"]; ?>">Edit</a>
+                            <a class="btn btn-primary mr-2 btn-sm" href="edit.php?reserveringklantid=<?php echo $reserveer["reserveringklantid"]; ?>">Edit</a>
                         </td>      
                         <td class="noExl">
-                            <a class="btn btn-danger mr-2 btn-sm" href="delete.php?klantnummer=<?php echo $reserveer["klantnummer"]; ?>">Delete</a>
+                            <a class="btn btn-danger mr-2 btn-sm" href="delete.php?reserveringklantid=<?php echo $reserveer["reserveringklantid"]; ?>">Delete</a>
                         </td> 
                     </tr>
                 <?php endforeach; ?>     
@@ -94,8 +98,17 @@ $reservering = $db->showReservering();
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.2/js/dataTables.buttons.min.js"></script>
+
+<script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.print.min.js"></script>
+
     <script>
-        $('#overzicht').DataTable();
+        $('#overzicht').DataTable( {
+        dom: 'Bfrtip',
+        buttons: [
+            'print'
+        ]
+    } );
     </script>
 </body>
 </html>

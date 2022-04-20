@@ -2,13 +2,13 @@
 include_once '../database.php';
 
 // Connection made
-$db = new DB('localhost', 'root', '', 'hotel', 'utf8mb4'); //hier zet je de waardes($..) constructor
+$db = new DB('localhost', 'root', '', 'hotel_ter_duin', 'utf8mb4'); //hier zet je de waardes($..) constructor
 
-$klantnummer = $db->selectSpecificKlant($_GET['klantnummer']);
+$reserveringklantid = $db->selectSpecificKlant($_GET['reserveringklantid']);
 
 if(isset($_POST["submit"])){
     //fieldnames - input fields
-    $fieldnames = ['klantnummer'];
+    $fieldnames = ['klantnummer', 'naam', 'adres', 'plaats', 'postcode', 'telefoonnummer', 'beginDatum', 'eindDatum', 'kamertype'];
 
     //Var boolean
     $err = false;
@@ -25,15 +25,9 @@ if(isset($_POST["submit"])){
     if ($err) {
         echo "All fields are required!";
     } else {
-        $naam = $_POST['naam'];
-        $adres = $_POST['adres'];
-        $plaats = $_POST['plaats'];
-        $postcode = $_POST['postcode'];
-        $telefoonnummer = $_POST['telefoonnummer'];
-        $begin_datum = $_POST['begin_datum'];
-        $eind_datum = $_POST['eind_datum'];
+
         
-        $db->updateKlant($_GET['klantnummer'], $naam, $adres, $plaats, $postcode, $telefoonnummer, $begin_datum, $eind_datum);
+        $db->updateKlant($_GET['reserveringklantid'], $_POST['naam'], $_POST['adres'], $_POST['plaats'], $_POST['postcode'], $_POST['telefoonnummer'], $_POST['beginDatum'], $_POST['eindDatum'], $_POST['kamertype']);
     }
 }
 
@@ -48,13 +42,15 @@ if(isset($_POST["submit"])){
 </head>
 <body>
     <form action="" method="post">
-        <input type="hidden" name="klantnummer" value="<?php echo $klantnummer['klantnummer'];?>">
-        <input type="text" name="naam" value="<?php echo $klantnummer['naam'];?>">
-        <input type="text" name="adres" value="<?php echo $klantnummer['adres'];?>">
-        <input type="text" name="plaats" value="<?php echo $klantnummer['plaats'];?>">
-        <input type="text" name="postcode" value="<?php echo $klantnummer['postcode'];?>">
-        <input type="text" name="begin_datum" value="<?php echo $klantnummer['begin_datum'];?>">
-        <input type="text" name="eind_datum" value="<?php echo $klantnummer['eind_datum'];?>">
+        <input type="hidden" name="klantnummer" value="<?php echo $reserveringklantid['klantnummer'];?>">
+        <input type="text" name="naam" value="<?php echo $reserveringklantid['naam'];?>">
+        <input type="text" name="adres" value="<?php echo $reserveringklantid['adres'];?>">
+        <input type="text" name="plaats" value="<?php echo $reserveringklantid['plaats'];?>">
+        <input type="text" name="postcode" value="<?php echo $reserveringklantid['postcode'];?>">
+        <input type="text" name="telefoonnummer" value="<?php echo $reserveringklantid['telefoonnummer'];?>">
+        <input type="text" name="beginDatum" value="<?php echo $reserveringklantid['beginDatum'];?>">
+        <input type="text" name="eindDatum" value="<?php echo $reserveringklantid['eindDatum'];?>">
+        <input type="text" name="kamertype" value="<?php echo $reserveringklantid['kamertype'];?>">
         <button type="submit" name="submit">Edit</button>
     </form>
 </body>
